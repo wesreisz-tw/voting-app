@@ -1,0 +1,20 @@
+version: '3'
+services:
+  azure-vote-back:
+    image: bitnami/redis:7.4.0
+    container_name: azure-vote-back
+    ports:
+        - "6379:6379"
+    command: >
+        --requirepass ${REDIS_PASSWORD}
+
+  azure-vote-front:
+    build: ./azure-vote
+    image: wesreisz/voting:v3
+    container_name: azure-vote-front
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_HOST: azure-vote-back
+      REDIS_PORT: 6379
+    ports:
+        - "8080:80"
